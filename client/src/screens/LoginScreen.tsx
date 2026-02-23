@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TextInput, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, Ionicons } from "@expo/vector-icons";
+import Constants from "expo-constants";
+
+const BACKEND_URL = Constants.expoConfig?.extra?.BACKEND_URL;
 
 export default function LoginScreen() {
 	const [username, setUsername] = useState("");

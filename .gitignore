@@ -35,5 +35,7 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+client/.env
 server/.env
+
 .prettierrc

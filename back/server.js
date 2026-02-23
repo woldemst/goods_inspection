@@ -23,14 +23,13 @@ const projectRoutes = require("./routes/project-routes");
 const adminRoutes = require("./routes/admin-routes");
 
 app.use(cors());
-app.use(express.json({ limit: "20mb" }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // routes
-app.use("/api/users", userRoutes);
-app.use("/api/reports", reportRoutes);
-app.use("/api/projects", projectRoutes);
-app.use("/api/admin", adminRoutes);
+// app.use("/api/users", userRoutes);
+// app.use("/api/reports", reportRoutes);
+// app.use("/api/projects", projectRoutes);
+// app.use("/api/admin", adminRoutes);
 
 // connect to MongoDB
 mongoose
