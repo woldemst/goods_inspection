@@ -30,7 +30,8 @@
       "BACKEND_URL": "http://localhost:3000"
     },
     "plugins": [
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-font"
     ]
   }
 }

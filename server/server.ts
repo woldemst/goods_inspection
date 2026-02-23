@@ -2,10 +2,10 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import { router } from "./routes";
+// import { router } from "./routes";
 // filesystem paths
-const uploadDir = process.env.UPLOADS || path.join(__dirname, "./uploads");
-const templateDir = process.env.TEMPLATES || path.join(__dirname, "./templates");
+// const uploadDir = process.env.UPLOADS || path.join(__dirname, "./uploads");
+// const templateDir = process.env.TEMPLATES || path.join(__dirname, "./templates");
 
 
 const app = express();
@@ -13,7 +13,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api", router);
+// app.use("/api", router);
 
 async function bootstrap() {
   const dbUrl = process.env.DB_URL;
