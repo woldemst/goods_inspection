@@ -47,6 +47,31 @@ export const createReport = async (req: Request, res: Response) => {
 	}
 };
 
+export const listAllReports = async (_req: Request, res: Response) => {
+	try {
+		const reports = await InspectionReport.find().populate("supplierId").sort({ createdAt: -1 });
+
+		return res.json(reports);
+	} catch (err) {
+		console.error("Error listing reports:", err);
+		return res.status(500).json({ error: "Reports could not be loaded" });
+	}
+};
+
+export const getReportBySupplierId = async (req: Request, res: Response) => {
+	try {
+		const { supplierId } = req.params;
+		if (!mongoose.isValidObjectId(supplierId)) {
+			return res.status(400).json({ error: "Invalid supplier ID" });
+		}
+
+		const reports = await InspectionReport.find({ supplierId }).sort({ createdAt: -1 });
+		return res.json(reports);
+	} catch (err) {
+		return res.status(500).json({ error: "Reports could not be loaded" });
+	}
+};
+
 // exports.editReportById = async (req, res) => {
 // 	try {
 // 		const { id } = req.params;

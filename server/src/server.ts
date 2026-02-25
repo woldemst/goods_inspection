@@ -18,7 +18,7 @@ app.use("/api", router);
 
 async function bootstrap() {
   const dbUrl = process.env.DB_URL;
-  const port = Number(process.env.PORT ?? 3000);
+  const port = Number(process.env.PORT ?? 3001);
 
   if (!dbUrl) {
     throw new Error("DB_URL is missing in .env");
