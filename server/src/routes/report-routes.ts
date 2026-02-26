@@ -1,17 +1,24 @@
 import { Router } from "express";
-import { createReport, listAllReports, getReportBySupplierId } from "../controllers/report-controller";
+import { createReport, listAllReports, getReportBySupplierId, getReportById } from "../controllers/report-controller";
 // import { upload } from "../middlewares/upload"; // wenn du upload als default export hast: import upload from ...
 
 export const reportRouter = Router();
 
-// Wichtig: spezifische Routen VOR den dynamischen Parametern!
-// reportRouter.get("/id/:id", reportController.getReportById);
 // reportRouter.get("/pdf/:id", reportController.generatePdf);
 
-// Upload route
+// Create a new report
 reportRouter.post("/", createReport);
+
+// Get all reports
 reportRouter.get("/", listAllReports);
+
+// Get all reports or reports by supplier
 reportRouter.get("/supplier/:supplierId", getReportBySupplierId);
+
+// Get a report by ID
+reportRouter.get("/:id", getReportById);
+
+
 // Update/Delete
 // reportRouter.put("/:id", reportController.editReportById);
 // reportRouter.put("/update/:id", reportController.updateReporttById);

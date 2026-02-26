@@ -72,6 +72,21 @@ export const getReportBySupplierId = async (req: Request, res: Response) => {
 	}
 };
 
+export const getReportById = async (req: Request, res: Response) => {
+	console.log("[GET /by-id] Params:", req.params);
+
+	try {
+		const report = await InspectionReport.findById(req.params.id);
+		if (!report) {
+			return res.status(404).json({ error: "Report nicht gefunden" });
+		}
+		res.json(report);
+	} catch (err) {
+		console.error("[GET /by-id] Error:", err);
+		res.status(500).json({ error: "Report kann nicht geladen werden" });
+	}
+};
+
 // exports.editReportById = async (req, res) => {
 // 	try {
 // 		const { id } = req.params;
@@ -82,21 +97,6 @@ export const getReportBySupplierId = async (req: Request, res: Response) => {
 // 	} catch (err) {
 // 		console.error("Fehler beim Aktualisieren des Reports:", err);
 // 		res.status(500).json({ error: "Update fehlgeschlagen" });
-// 	}
-// };
-
-// exports.getReportById = async (req, res) => {
-// 	console.log("[GET /by-id] Params:", req.params);
-
-// 	try {
-// 		const report = await Report.findById(req.params.id);
-// 		if (!report) {
-// 			return res.status(404).json({ error: "Report nicht gefunden" });
-// 		}
-// 		res.json(report);
-// 	} catch (err) {
-// 		console.error("[GET /by-id] Error:", err);
-// 		res.status(500).json({ error: "Report kann nicht geladen werden" });
 // 	}
 // };
 
