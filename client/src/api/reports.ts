@@ -1,10 +1,11 @@
 import { API_BASE_URL } from "../config/api";
+import { Supplier } from "./suppliers";
 
 export type Report = {
     _id: string;
     title: string;
     description: string;
-    supplierId: string; // populated object
+    supplierId: string | Supplier; // populated object
     createdByEmail: string;
     status: "OK" | "DEFECT";
     createdAt: string;
