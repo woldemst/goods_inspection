@@ -1,7 +1,5 @@
 import { Schema, model, Types } from "mongoose";
 
-export type InspectionStatus = "OK" | "DEFECT";
-
 const inspectionReportSchema = new Schema(
 	{
 		title: { type: String, required: true, trim: true },

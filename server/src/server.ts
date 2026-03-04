@@ -16,22 +16,22 @@ app.use(express.json());
 app.use("/api", router);
 
 async function bootstrap() {
-	const dbUrl = process.env.DB_URL;
-	const port = Number(process.env.PORT ?? 3001);
+  const dbUrl = process.env.DB_URL;
+  const port = 3001;
 
-	if (!dbUrl) {
-		throw new Error("DB_URL is missing in .env");
-	}
+  if (!dbUrl) {
+    throw new Error("DB_URL is missing in .env");
+  }
 
-	await mongoose.connect(dbUrl);
-	console.log("✅ MongoDB connected");
+  await mongoose.connect(dbUrl);
+  console.log("✅ MongoDB connected");
 
-	app.listen(port, () => {
-		console.log(`✅ Server running on http://localhost:${port}`);
-	});
+  app.listen(port, () => {
+    console.log(`✅ Server running on http://localhost:${port}`);
+  });
 }
 
 bootstrap().catch((err) => {
-	console.error("❌ Failed to start server:", err);
-	process.exit(1);
+  console.error("❌ Failed to start server:", err);
+  process.exit(1);
 });
