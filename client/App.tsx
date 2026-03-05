@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SuppliersScreen } from "./src/screens/SuppliersScreen";
 import { ReportsScreen } from "./src/screens/ReportsScreen";
+import { ReportDetailScreen } from "./src/screens/ReportDetailScreen";
 import { CreateReportScreen } from "./src/screens/CreateReportScreen";
 import { View, Button } from "react-native";
 
@@ -26,6 +27,7 @@ export default function App() {
         <Stack.Screen name="Suppliers" component={SuppliersScreen} />
         <Stack.Screen name="Reports" component={ReportsScreen} />
         <Stack.Screen name="CreateReport" component={CreateReportScreen} />
+        <Stack.Screen name="ReportDetail" component={ReportDetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
