@@ -23,6 +23,12 @@ export async function fetchReportById(id: string): Promise<Report> {
   return res.json();
 }
 
+export async function fetchReportBySupplier(supplierId: string): Promise<Report[]> {
+  const res = await fetch(`${API_BASE_URL}/reports/supplier/${supplierId}`);
+  if (!res.ok) throw new Error(`Failed to fetch reports by supplier id: ${res.status}`);
+  return res.json();
+}
+
 export async function createReport(input: {
   title: string;
   description?: string;
