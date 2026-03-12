@@ -8,58 +8,95 @@ import fs from "fs";
 // const puppeteer = require("puppeteer");
 
 export const createSupplier = async (req: Request, res: Response) => {
-	try {
-		const { name } = req.body;
-		const contactEmail = req.body.contactEmail || "";
-		const notes = req.body.notes || "";
+  try {
+    const { name } = req.body;
+    const contactEmail = req.body.contactEmail || "";
+    const notes = req.body.notes || "";
 
-		console.log(name, notes, contactEmail);
+    console.log(name, notes, contactEmail);
 
-		if (!name) {
-			return res.status(400).json({ error: "name is required" });
-		}
+    if (!name) {
+      return res.status(400).json({ error: "name is required" });
+    }
 
-		const supplier = await Supplier.create({
-			name: String(name).trim(),
-			contactEmail: String(contactEmail).trim().toLowerCase(),
-			notes: String(notes).trim(),
-		});
+    const supplier = await Supplier.create({
+      name: String(name).trim(),
+      contactEmail: String(contactEmail).trim().toLowerCase(),
+      notes: String(notes).trim(),
+    });
 
-		return res.status(201).json(supplier);
-	} catch (err) {
-		console.error("Error if creating a supplier:", err);
-		res.status(500).json({ error: "Supplier could not be created" });
-	}
+    return res.status(201).json(supplier);
+  } catch (err) {
+    console.error("Error if creating a supplier:", err);
+    res.status(500).json({ error: "Supplier could not be created" });
+  }
 };
 
 export const listAllSuppliers = async (_req: Request, res: Response) => {
-	try {
-		const suppliers = await Supplier.find().sort({ createdAt: -1 });
-		return res.json(suppliers);
-	} catch (err) {
-		console.error("Error listing suppliers:", err);
-		return res.status(500).json({ error: "Suppliers could not be loaded" });
-	}
+  try {
+    const suppliers = await Supplier.find().sort({ createdAt: -1 });
+    return res.json(suppliers);
+  } catch (err) {
+    console.error("Error listing suppliers:", err);
+    return res.status(500).json({ error: "Suppliers could not be loaded" });
+  }
 };
 
 export const getSupplierById = async (req: Request, res: Response) => {
-	try {
-		const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-		if (!mongoose.isValidObjectId(id)) {
-			return res.status(400).json({ error: "Invalid supplier ID" });
-		}
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ error: "Invalid supplier ID" });
+    }
 
-		const supplier = await Supplier.findById(id);
+    const supplier = await Supplier.findById(id);
 
-		if (!supplier) return res.status(404).json({ error: "Supplier not found" });
+    if (!supplier) return res.status(404).json({ error: "Supplier not found" });
 
-		return res.json(supplier);
-	} catch (err) {
-		console.error("Error fetching supplier by ID:", err);
-		res.status(500).json({ error: "Failed to fetch supplier" });
-	}
+    return res.json(supplier);
+  } catch (err) {
+    console.error("Error fetching supplier by ID:", err);
+    res.status(500).json({ error: "Failed to fetch supplier" });
+  }
 };
+
+export const updateSupplierById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+    const contactEmail = req.body.contactEmail || "";
+    const notes = req.body.notes || "";
+
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ error: "Invalid supplier ID" });
+    }
+
+    if (!name || !String(name).trim()) {
+      return res.status(400).json({ error: "name is required" });
+    }
+
+    const updatedSupplier = await Supplier.findByIdAndUpdate(
+      id,
+      {
+        name: String(name).trim(),
+        contactEmail: String(contactEmail).trim().toLowerCase(),
+        notes: String(notes).trim(),
+      },
+      { new: true },
+    );
+
+    if (!updatedSupplier) {
+      return res.status(404).json({ error: "Supplier not found" });
+    }
+
+    return res.json(updatedSupplier);
+  } catch (err) {
+    console.error("Error updating supplier:", err);
+    return res.status(500).json({ error: "Supplier could not be updated" });
+  }
+};
+
 
 // exports.getAllProjectsByUserId = async (req, res) => {
 // 	try {
@@ -70,19 +107,6 @@ export const getSupplierById = async (req: Request, res: Response) => {
 // 	} catch (err) {
 // 		console.error("Error if fetching projects by userId:", err);
 // 		res.status(500).json({ error: "Projects could not be fetched" });
-// 	}
-// };
-
-// 	exports.updateProjectById = async (req, res) => {
-// 		try {
-// 			const { id } = req.params;
-// 			const { title, description, imageUri } = req.body;
-// 			const updated = await Project.findByIdAndUpdate(id, { title, description, imageUri }, { new: true });
-// 			if (!updated) return res.status(404).json({ error: "Project not found" });
-// 			res.json(updated);
-// 		} catch (err) {
-// 		console.error("Error updating project:", err);
-// 		res.status(500).json({ error: "Failed to update project" });
 // 	}
 // };
 

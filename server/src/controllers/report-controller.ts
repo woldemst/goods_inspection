@@ -9,82 +9,103 @@ import { InspectionReport } from "../models/InspectionReport";
 const BACKEND_URL = process.env.BACKEND_URL;
 
 export const createReport = async (req: Request, res: Response) => {
-	try {
-		const { createdByEmail, title, supplierId, status } = req.body;
-		const description = req.body.description || "";
+  try {
+    const { createdByEmail, title, supplierId, status } = req.body;
+    const description = req.body.description || "";
 
-		if (!createdByEmail || !title || !supplierId || !status) {
-			return res.status(400).json({
-				error: "createdByEmail, title, supplierId and status are required",
-			});
-		}
+    if (!createdByEmail || !title || !supplierId || !status) {
+      return res.status(400).json({
+        error: "createdByEmail, title, supplierId and status are required",
+      });
+    }
 
-		if (status !== "OK" && status !== "DEFECT") {
-			return res.status(400).json({ error: "status must be OK or DEFECT" });
-		}
+    if (status !== "OK" && status !== "DEFECT") {
+      return res.status(400).json({ error: "status must be OK or DEFECT" });
+    }
 
-		if (!mongoose.isValidObjectId(supplierId)) {
-			return res.status(400).json({ error: "supplierId is invalid" });
-		}
+    if (!mongoose.isValidObjectId(supplierId)) {
+      return res.status(400).json({ error: "supplierId is invalid" });
+    }
 
-		const supplierExists = await Supplier.exists({ _id: supplierId });
-		if (!supplierExists) {
-			return res.status(404).json({ error: "Supplier not found" });
-		}
+    const supplierExists = await Supplier.exists({ _id: supplierId });
+    if (!supplierExists) {
+      return res.status(404).json({ error: "Supplier not found" });
+    }
 
-		const report = await InspectionReport.create({
-			createdByEmail: String(createdByEmail).trim().toLowerCase(),
-			title: String(title).trim(),
-			description: String(description),
-			supplierId,
-			status,
-		});
+    const report = await InspectionReport.create({
+      createdByEmail: String(createdByEmail).trim().toLowerCase(),
+      title: String(title).trim(),
+      description: String(description),
+      supplierId,
+      status,
+    });
 
-		return res.status(201).json(report);
-	} catch (err) {
-		console.error("Error creating report:", err);
-		return res.status(500).json({ error: "Report could not be created" });
-	}
+    return res.status(201).json(report);
+  } catch (err) {
+    console.error("Error creating report:", err);
+    return res.status(500).json({ error: "Report could not be created" });
+  }
 };
 
 export const listAllReports = async (_req: Request, res: Response) => {
-	try {
-		const reports = await InspectionReport.find().populate("supplierId").sort({ createdAt: -1 });
+  try {
+    const reports = await InspectionReport.find().populate("supplierId").sort({ createdAt: -1 });
 
-		return res.json(reports);
-	} catch (err) {
-		console.error("Error listing reports:", err);
-		return res.status(500).json({ error: "Reports could not be loaded" });
-	}
+    return res.json(reports);
+  } catch (err) {
+    console.error("Error listing reports:", err);
+    return res.status(500).json({ error: "Reports could not be loaded" });
+  }
 };
 
 export const getReportBySupplierId = async (req: Request, res: Response) => {
-	try {
-		const { supplierId } = req.params;
-		if (!mongoose.isValidObjectId(supplierId)) {
-			return res.status(400).json({ error: "Invalid supplier ID" });
-		}
+  try {
+    const { supplierId } = req.params;
+    if (!mongoose.isValidObjectId(supplierId)) {
+      return res.status(400).json({ error: "Invalid supplier ID" });
+    }
 
-		const reports = await InspectionReport.find({ supplierId }).sort({ createdAt: -1 });
-		return res.json(reports);
-	} catch (err) {
-		return res.status(500).json({ error: "Reports could not be loaded" });
-	}
+    const reports = await InspectionReport.find({ supplierId }).sort({ createdAt: -1 });
+    return res.json(reports);
+  } catch (err) {
+    return res.status(500).json({ error: "Reports could not be loaded" });
+  }
 };
 
 export const getReportById = async (req: Request, res: Response) => {
-	console.log("[GET /by-id] Params:", req.params);
+  console.log("[GET /by-id] Params:", req.params);
 
-	try {
-		const report = await InspectionReport.findById(req.params.id);
-		if (!report) {
-			return res.status(404).json({ error: "Report nicht gefunden" });
-		}
-		res.json(report);
-	} catch (err) {
-		console.error("[GET /by-id] Error:", err);
-		res.status(500).json({ error: "Report kann nicht geladen werden" });
-	}
+  try {
+    const report = await InspectionReport.findById(req.params.id);
+    if (!report) {
+      return res.status(404).json({ error: "Report nicht gefunden" });
+    }
+    res.json(report);
+  } catch (err) {
+    console.error("[GET /by-id] Error:", err);
+    res.status(500).json({ error: "Report kann nicht geladen werden" });
+  }
+};
+
+export const deleteReportById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ error: "Invalid report ID" });
+    }
+
+    const deletedReport = await InspectionReport.findByIdAndDelete(id);
+
+    if (!deletedReport) {
+      return res.status(404).json({ error: "Report not found" });
+    }
+
+    return res.json({ message: "Report deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting report:", err);
+    return res.status(500).json({ error: "Report could not be deleted" });
+  }
 };
 
 // exports.editReportById = async (req, res) => {
@@ -122,18 +143,6 @@ export const getReportById = async (req: Request, res: Response) => {
 // 	} catch (err) {
 // 		console.error("Error updating report:", err);
 // 		res.status(500).json({ error: "Failed to update report" });
-// 	}
-// };
-
-// exports.deleteReportById = async (req, res) => {
-// 	try {
-// 		const { id } = req.params;
-// 		const deleted = await Report.findByIdAndDelete(id);
-// 		if (!deleted) return res.status(404).json({ error: "Report not found" });
-// 		res.json({ success: true });
-// 	} catch (err) {
-// 		console.error("Error deleting report:", err);
-// 		res.status(500).json({ error: "Failed to delete report" });
 // 	}
 // };
 
