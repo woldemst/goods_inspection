@@ -1,26 +1,20 @@
 import { Router } from "express";
-import { createReport, listAllReports, getReportBySupplierId, getReportById, deleteReportById} from "../controllers/report-controller";
-// import { upload } from "../middlewares/upload"; // wenn du upload als default export hast: import upload from ...
+
+import { createReport, listAllReports, getReportBySupplierId, getReportById, deleteReportById } from "../controllers/report-controller";
+
+import { authRequired } from "../middlewares/auth-middleware";
+import { requireRole } from "../middlewares/role-middleware";
 
 export const reportRouter = Router();
 
 // reportRouter.get("/pdf/:id", reportController.generatePdf);
 
-// Create a new report
-reportRouter.post("/", createReport);
+reportRouter.get("/", authRequired, listAllReports);
+reportRouter.get("/supplier/:supplierId", authRequired, getReportBySupplierId);
+reportRouter.get("/:id", authRequired, getReportById);
 
-// Get all reports
-reportRouter.get("/", listAllReports);
-
-// Get all reports or reports by supplier
-reportRouter.get("/supplier/:supplierId", getReportBySupplierId);
-
-// Get a report by ID
-reportRouter.get("/:id", getReportById);
-
-// Delete a report by ID
-reportRouter.delete("/:id", deleteReportById);
-
+reportRouter.post("/", authRequired, requireRole("admin", "employee"), createReport);
+reportRouter.delete("/:id", authRequired, requireRole("admin"), deleteReportById);
 
 // Update/Delete
 // reportRouter.put("/:id", reportController.editReportById);
