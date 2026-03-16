@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "../config/api";
+import { fetchWithAuth } from "./fetchWithAuth";
 import { Supplier } from "./suppliers";
 
 export type Report = {
@@ -12,25 +13,25 @@ export type Report = {
 };
 
 export async function fetchReports(): Promise<Report[]> {
-    const res = await fetch(`${API_BASE_URL}/reports`);
+    const res = await fetchWithAuth(`${API_BASE_URL}/reports`);
     if (!res.ok) throw new Error(`Failed to fetch reports: ${res.status}`);
     return res.json();
 }
 
 export async function fetchReportById(id: string): Promise<Report> {
-    const res = await fetch(`${API_BASE_URL}/reports/${id}`);
+    const res = await fetchWithAuth(`${API_BASE_URL}/reports/${id}`);
     if (!res.ok) throw new Error(`Failed to fetch reports by id: ${res.status}`);
     return res.json();
 }
 
 export async function fetchReportBySupplier(supplierId: string): Promise<Report[]> {
-    const res = await fetch(`${API_BASE_URL}/reports/supplier/${supplierId}`);
+    const res = await fetchWithAuth(`${API_BASE_URL}/reports/supplier/${supplierId}`);
     if (!res.ok) throw new Error(`Failed to fetch reports by supplier id: ${res.status}`);
     return res.json();
 }
 
 export async function deleteReport(id: string): Promise<void> {
-    const res = await fetch(`${API_BASE_URL}/reports/${id}`, {
+    const res = await fetchWithAuth(`${API_BASE_URL}/reports/${id}`, {
         method: "DELETE",
     });
 

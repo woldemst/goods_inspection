@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "../config/api";
+import { fetchWithAuth } from "./fetchWithAuth";
 
 export type Supplier = {
     _id: string;
@@ -8,13 +9,13 @@ export type Supplier = {
 };
 
 export async function fetchSuppliers(): Promise<Supplier[]> {
-    const res = await fetch(`${API_BASE_URL}/suppliers`);
+    const res = await fetchWithAuth(`${API_BASE_URL}/suppliers`);
     if (!res.ok) throw new Error(`Failed to fetch suppliers: ${res.status}`);
     return res.json();
 }
 
 export async function fetchSupplierById(id: string): Promise<Supplier> {
-    const res = await fetch(`${API_BASE_URL}/suppliers/${id}`);
+    const res = await fetchWithAuth(`${API_BASE_URL}/suppliers/${id}`);
     if (!res.ok) throw new Error(`Failed to fetch supplier: ${res.status}`);
     return res.json();
 }
@@ -23,7 +24,7 @@ export async function updateSupplier(
     id: string,
     input: { name: string; contactEmail?: string; notes?: string },
 ): Promise<Supplier> {
-    const res = await fetch(`${API_BASE_URL}/suppliers/${id}`, {
+    const res = await fetchWithAuth(`${API_BASE_URL}/suppliers/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(input),
@@ -38,7 +39,7 @@ export async function createSupplier(input: {
     contactEmail?: string;
     notes?: string;
 }): Promise<Supplier> {
-    const res = await fetch(`${API_BASE_URL}/suppliers`, {
+    const res = await fetchWithAuth(`${API_BASE_URL}/suppliers`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(input),
