@@ -6,7 +6,7 @@ const inspectionReportSchema = new Schema(
 		description: { type: String, default: "" },
 		status: { type: String, enum: ["OK", "DEFECT"], required: true },
 		supplierId: { type: Types.ObjectId, ref: "Supplier", required: true },
-		createdByEmail: { type: String, required: true, lowercase: true, trim: true },
+		createdBy: { type: String, required: true, lowercase: true, trim: true },
 		images: { type: [String], default: [] },
 	},
 	{ timestamps: true },
