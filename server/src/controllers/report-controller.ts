@@ -33,7 +33,7 @@ export const createReport = async (req: Request, res: Response) => {
     }
 
     const report = await InspectionReport.create({
-      createdByEmail: String(createdByEmail).trim().toLowerCase(),
+      createdBy: String(createdByEmail).trim().toLowerCase(),
       title: String(title).trim(),
       description: String(description),
       supplierId,
