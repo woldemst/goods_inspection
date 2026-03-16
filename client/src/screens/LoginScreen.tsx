@@ -26,7 +26,7 @@ export function LoginScreen({ onLogin }: any) {
     }
 
     return (
-        <View style={{ padding: 16, gap: 12 }}>
+        <View style={{ padding: 16, gap: 12, width: "100%" }}>
             <Text style={{ fontSize: 24, fontWeight: "bold" }}>Login</Text>
 
             {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
